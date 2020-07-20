@@ -31,8 +31,14 @@
           </div>
 
           <div id="list-div">
-            <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
-              <van-list v-model="loading" :finished="finished" @load="onLoad">
+            <van-pull-refresh v-model="loading" @refresh="onRefresh">
+              <van-list
+                v-model="loading"
+                :finished="finished"
+                @load="onLoad"
+                :immediate-check="false"
+                finished-text="已经到底啦"
+              >
                 <div
                   class="list-item"
                   @click="goGoodsInfo(item.ID)"
@@ -59,6 +65,7 @@
 <script>
 import url from "@/serviceAPI.config.js";
 import { toMoney } from "@/filter/moneyFilter.js";
+import { Toast } from 'vant';
 
 export default {
   data() {
@@ -72,7 +79,6 @@ export default {
       finished: false, //下拉加载是否没有数据了
       page: 1, //商品列表的页数
       goodList: [], //商品列表信息
-      isRefresh: false, //下拉刷新
       errorImg: 'this.src="' + require("@/assets/images/errorimg.png") + '"'
     };
   },
@@ -87,9 +93,11 @@ export default {
   mounted() {
     let winHeight = document.documentElement.clientHeight;
     // 左侧适应页面高度
-    document.getElementById("leftNav").style.height = winHeight -46-50 + "px";
+    document.getElementById("leftNav").style.height =
+      winHeight - 46 - 50 + "px";
     // 设置list-div的高度
-    document.getElementById("list-div").style.height = winHeight - 90 -50 + "px";
+    document.getElementById("list-div").style.height =
+      winHeight - 90 - 50 + "px";
   },
   methods: {
     getCategory() {
@@ -113,8 +121,9 @@ export default {
     //点击大类的方法
     clickCategory(index, categoryId) {
       this.categoryIndex = index;
-      this.page = 1;
+      this.loading = true;
       this.finished = false;
+      this.page = 1;
       this.goodList = [];
       this.getCategorySubByCategoryId(categoryId);
     },
@@ -141,35 +150,29 @@ export default {
     },
     //点击子类获取商品信息
     onClickCategorySub(index, title) {
-      //console.log( this.categorySub)
       this.categorySubId = this.categorySub[index].ID;
-      console.log(this.categorySubId);
-
-      this.goodList = [];
+      this.loading = true;
       this.finished = false;
       this.page = 1;
+      this.goodList = [];
       this.onLoad();
     },
     //上拉加载方法
     onLoad() {
-      setTimeout(() => {
-        this.categorySubId = this.categorySubId
-          ? this.categorySubId
-          : this.categorySub[0].ID;
-        this.getGoodList();
-      }, 1000);
+      this.getGoodList();
     },
     //下拉刷新方法
     onRefresh() {
-      setTimeout(() => {
-        this.isRefresh = false;
-        this.finished = false;
-        this.goodList = [];
-        this.page = 1;
-        this.onLoad();
-      }, 500);
+      this.finished = false;
+      this.page = 1;
+      this.goodList = [];
+      this.onLoad();
     },
     getGoodList() {
+      Toast.loading({
+        message: "加载中...",
+        forbidClick: true
+      });
       this.$axios({
         url: url.getGoodsListByCategorySubID,
         method: "post",
@@ -187,6 +190,7 @@ export default {
             this.finished = true;
           }
           this.loading = false;
+          Toast.clear()
         })
         .catch(error => {
           console.log(error);

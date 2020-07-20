@@ -9,12 +9,16 @@ router.get("/insertAllGoodsInfo", async (ctx) => {
   fs.readFile("./data_json/newGoods.json", "utf8", (err, data) => {
     // console.log(`当前工作目录是: ${process.cwd()}`);
     data = JSON.parse(data);
+    let totalNum = data.length;
     let saveCount = 0;
     const Goods = mongoose.model("Goods");
-    data.map((value, index) => {
-      console.log(value);
-      let newGoods = new Goods(value);
-      newGoods
+    data.map(async (value, index) => {
+      const repeatedGoods= await Goods.findOne({ ID: value.ID});
+      if(repeatedGoods){
+        console.log("商品已经存在");
+      }else{
+        let newGoods = new Goods(value);
+        newGoods
         .save()
         .then(() => {
           saveCount++;
@@ -22,12 +26,24 @@ router.get("/insertAllGoodsInfo", async (ctx) => {
         })
         .catch((error) => {
           console.log("失败：" + error);
-        });
+        })
+        .finally(()=>{
+          console.log("成功导入商品： "+saveCount+"; 全部商品："+ totalNum);
+        })
+      }
+      
     });
-
+    
   });
   ctx.body = "开始导入数据--insertAllGoodsInfo";
 });
+// 删除商品信息
+router.get("/delAllGoodsInfo", async (ctx) => {
+  const Goods = mongoose.model('Goods');
+  let result = await Goods.deleteMany({GOOD_TYPE: 0});
+  ctx.body={code:204,message:result};
+});
+
 // 批量导入商品大类
 router.get("/insertAllCategory", async (ctx) => {
   fs.readFile("./data_json/category.json", "utf8", (err, data) => {
@@ -72,7 +88,6 @@ router.get("/insertAllCategorySub", async (ctx) => {
   });
   ctx.body = "开始导入数据";
 });
-
 // 获取商品详细信息的接口
 router.post("/getDetailGoodsInfo", async (ctx) => {
   try {
@@ -114,7 +129,6 @@ router.post('/getGoodsListByCategorySubID',async(ctx)=>{
       let page =ctx.request.body.page
       let num = 10 //每页显示数量
       let start = (page-1)*num
-      //let categorySubId = '2c9f6c946016ea9b016016f79c8e0000'
       const Goods = mongoose.model('Goods')
       let result = await Goods.find({SUB_ID:categorySubId})
       .skip(start) .limit(num).exec()

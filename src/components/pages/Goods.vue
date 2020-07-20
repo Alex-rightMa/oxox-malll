@@ -35,7 +35,7 @@ import { toMoney } from "@/filter/moneyFilter.js";
 export default {
   data() {
     return {
-      goodsId: "775e575ce28a4f89b1dfe2c99eb08ae7",
+      goodsId: "",
       goodsInfo: {} //商品详细数据
     };
   },

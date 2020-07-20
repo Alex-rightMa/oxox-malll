@@ -4,7 +4,7 @@
       <van-nav-bar title="会员中心" />
     </div>
     <div class="top">
-      <img src="http://7xjyw1.com1.z0.glb.clouddn.com/touxiang001.jpg" class="top-img" />
+      <img src="@/assets/images/avater.jpg" class="top-img" />
     </div>
     <div class="login">
       <div>
@@ -41,14 +41,14 @@ export default {
 
 <style scoped>
 .top-img {
-  width: 70px;
-  height: 70px;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50px;
+  margin-top: 1.5rem;
 }
 .top {
-  height: 5rem;
+  height: 7rem;
   text-align: center;
-  padding-top: 2rem;
   background-color: #eea2ad;
 }
 .login {
