@@ -111,7 +111,6 @@ export default {
     this.$axios
       .get(url.getShoppingMallInfo)
       .then(res => {
-        // console.log(res.data.category);
         const {
           category,
           advertesPicture,

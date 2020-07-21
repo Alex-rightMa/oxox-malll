@@ -74,7 +74,29 @@ export default {
     onClickLeft() {
       this.$router.go(-1);
     },
+    refreshLoginState() {
+      return localStorage.getItem("userInfo");
+    },
     addGoodsToCart() {
+      // 没有登陆状态
+      if (!this.refreshLoginState()) {
+        Toast({
+          message: "请先登陆后,在加入购物车哦",
+          icon: "like-o",
+          onClose: () => {
+            // 将携带的商品ID传递过去
+            this.$router.replace({
+              name: "Login",
+              params: { goodsId: this.goodsId }
+            });
+          }
+        });
+        return;
+      }
+      // 数据没有我去加载出来
+      if (!this.goodsInfo.NAME) {
+        return;
+      }
       //取出购物车内的商品数据
       let cartInfo = localStorage.cartInfo
         ? JSON.parse(localStorage.cartInfo)

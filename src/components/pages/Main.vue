@@ -2,7 +2,7 @@
   <div>
     <div class="main-div">
       <keep-alive>
-        <router-view />
+        <router-view ref="activePage" />
       </keep-alive>
     </div>
     <van-tabbar v-model="active" @change="changeTabbar(active)">
@@ -23,14 +23,14 @@ export default {
     };
   },
   created() {
-    this.changeTabBarActive();
+    this.changeTabBarActive('created');
   },
   updated() {
     this.changeTabBarActive();
   },
   methods: {
     changeTabbar(active) {
-      console.log(active);
+      this.active = active;
       switch (active) {
         case 0:
           this.$router.push({ name: "XoxoMall" });
@@ -46,15 +46,23 @@ export default {
           break;
       }
     },
-    changeTabBarActive() {
+    changeTabBarActive(state) {
       this.nowPath = this.$route.path;
-      if (this.nowPath == "/Cart") {
-        this.active = 2;
+      this.active = ["/main/", "/CategoryList", "/Cart", "/Member"].indexOf(
+        this.nowPath
+      );
+      // 动态刷新购物车页面的用户登陆状态 
+      if (this.nowPath === "/Cart" && state != 'created') {
+        this.$refs.activePage.refreshLoginState &&
+        this.$refs.activePage.refreshLoginState();
       }
-    }
+    },
   }
 };
 </script>
 
 <style scoped>
+.main-div{
+  margin-bottom: 50px;
+}
 </style>

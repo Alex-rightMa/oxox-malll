@@ -5,8 +5,14 @@
     </div>
     <div class="top">
       <img src="@/assets/images/avater.jpg" class="top-img" />
+      <div class="user-name" v-if="userInfo">{{userInfo}}</div>
     </div>
-    <div class="login">
+    <div class="login" v-if="userInfo">
+      <div>
+        <van-button type="warning" @click="goLogout()">退出登陆</van-button>
+      </div>
+    </div>
+    <div class="login" v-else> 
       <div>
         <van-button type="warning" @click="goLogin()">我要登录</van-button>
       </div>
@@ -28,12 +34,24 @@
 
 <script>
 export default {
+  data() {
+    return {
+      userInfo: null
+    }
+  },
+  created() {
+    this.userInfo = localStorage.getItem('userInfo');
+  },
   methods: {
     goLogin() {
       this.$router.push({ name: "Login"});
     },
     goRegister() {
       this.$router.push({ name: "Register"});
+    },
+    goLogout() {
+      this.userInfo = localStorage.removeItem('userInfo');
+      this.$router.push('/main/');
     }
   }
 };
@@ -60,5 +78,8 @@ export default {
 .login div {
   flex: 1;
   text-align: center;
+}
+.user-name{
+    color: greenyellow;
 }
 </style>

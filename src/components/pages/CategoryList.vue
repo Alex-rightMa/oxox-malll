@@ -169,10 +169,6 @@ export default {
       this.onLoad();
     },
     getGoodList() {
-      Toast.loading({
-        message: "加载中...",
-        forbidClick: true
-      });
       this.$axios({
         url: url.getGoodsListByCategorySubID,
         method: "post",
@@ -190,7 +186,6 @@ export default {
             this.finished = true;
           }
           this.loading = false;
-          Toast.clear()
         })
         .catch(error => {
           console.log(error);

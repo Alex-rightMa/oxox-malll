@@ -44,7 +44,12 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.go(-1);
+      let goodsId = this.$route.params.goodsId;
+      if( goodsId ){
+        this.$router.replace({ name: "Goods", params: { goodsId } });
+      }else{
+        this.$router.back();
+      }
     },
     checkForm() {
       let isOk = true;
@@ -65,7 +70,6 @@ export default {
     LoginAction() {
       this.checkForm() && this.axiosLoginUser();
     },
-
     axiosLoginUser() {
       this.openLoading = true; // 防止用户重复提交
       this.$axios
@@ -74,18 +78,17 @@ export default {
             password: this.password
         })
         .then(response => {
-          console.log(response);
           //如果返回code为200，代表注册成功，我们给用户作Toast提示
           if (response.code == 200 && response.message) {
             new Promise((resolve, reject) => {
-              localStorage.userInfo = { userName: this.username };
+              localStorage.userInfo = this.username ;
               setTimeout(() => {
                 resolve();
               }, 500);
             })
               .then(() => {
                 Toast.success("登录成功");
-                this.$router.push("/");
+                this.goBack();
               })
               .catch(err => {
                 Toast.fail("登录状态保存失败");

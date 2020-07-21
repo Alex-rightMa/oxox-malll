@@ -7,7 +7,7 @@
         v-model="username"
         label="用户名"
         icon="clear"
-        placeholder="请输入用户名"
+        placeholder="请输入用户名,不能小于5位"
         required
         @click-icon="username = ''"
         :error-message="usernameErrorMsg"
@@ -17,7 +17,7 @@
         v-model="password"
         type="password"
         label="密码"
-        placeholder="请输入密码"
+        placeholder="请输入密码,不能少于6位"
         required
         :error-message="passwordErrorMsg"
       />
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-// import axios from "axios";
 import url from "@/serviceAPI.config.js";
 import { Toast } from "vant";
 
@@ -80,10 +79,9 @@ export default {
           //如果返回code为200，代表注册成功，我们给用户作Toast提示
           if (response.code == 200) {
             Toast.success("注册成功");
-            this.$router.push("/");
+            this.$router.go(-1);
           } else {
-            console.log(response.message);
-            Toast.fail("注册失败");
+            Toast.fail("注册失败"+ response.message);
             this.openLoading = false;
           }
         })

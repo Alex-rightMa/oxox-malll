@@ -8,6 +8,7 @@ const bodyParser = require('koa-bodyparser')
 const cors = require('koa2-cors')
 // 加载app中间件
 app.use(bodyParser())
+// 设置支持跨域
 app.use(cors())
 
 let user = require('./appApi/user.js')
