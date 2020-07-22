@@ -57,8 +57,12 @@ export default {
     };
   },
   created() {
-    this.userInfo = localStorage.getItem("userInfo");
+    this.refreshLoginState();
     this.userInfo && this.getCartInfo();
+  },
+  activated() {
+    // keepAlive缓存的组件
+    this.refreshLoginState();
   },
   computed: {
     totalMoney() {

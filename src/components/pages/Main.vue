@@ -23,7 +23,7 @@ export default {
     };
   },
   created() {
-    this.changeTabBarActive('created');
+    this.changeTabBarActive();
   },
   updated() {
     this.changeTabBarActive();
@@ -46,16 +46,11 @@ export default {
           break;
       }
     },
-    changeTabBarActive(state) {
+    changeTabBarActive() {
       this.nowPath = this.$route.path;
       this.active = ["/main/", "/CategoryList", "/Cart", "/Member"].indexOf(
         this.nowPath
       );
-      // 动态刷新购物车页面的用户登陆状态 
-      if (this.nowPath === "/Cart" && state != 'created') {
-        this.$refs.activePage.refreshLoginState &&
-        this.$refs.activePage.refreshLoginState();
-      }
     },
   }
 };
@@ -63,6 +58,8 @@ export default {
 
 <style scoped>
 .main-div{
-  margin-bottom: 50px;
+  height: 100vh;
+  overflow-y: scroll;
+  /* margin-bottom: 50px; */
 }
 </style>
