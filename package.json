@@ -8,7 +8,7 @@
     "localdev": "pm2 start ./service/app.js --watch -- admin manguodbgreat && vue-cli-service serve"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "core-js": "^3.6.5",
     "glob": "^7.1.6",
