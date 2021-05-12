@@ -17,7 +17,7 @@
     "koa-router": "^9.0.1",
     "koa2-cors": "^2.0.6",
     "mongoose": "^5.9.20",
-    "swiper": "^5.4.2",
+    "swiper": "^6.5.1",
     "vant": "^2.8.5",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
